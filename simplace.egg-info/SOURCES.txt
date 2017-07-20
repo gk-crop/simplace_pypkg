@@ -1,0 +1,14 @@
+CHANGELOG.rst
+MANIFEST.in
+README.rst
+setup.py
+simplace/SimplaceClasses.py
+simplace/__init__.py
+simplace/_version.py
+simplace/simplace.py
+simplace.egg-info/PKG-INFO
+simplace.egg-info/SOURCES.txt
+simplace.egg-info/dependency_links.txt
+simplace.egg-info/not-zip-safe
+simplace.egg-info/requires.txt
+simplace.egg-info/top_level.txt

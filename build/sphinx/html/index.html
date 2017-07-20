@@ -1,0 +1,634 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Simplace’s documentation! &#8212; simplace 4.0.1 documentation</title>
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '4.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="simplace-s-documentation">
+<h1>Simplace’s documentation!<a class="headerlink" href="#simplace-s-documentation" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+</div>
+<dl class="docutils">
+<dt>The package offers two interfaces to the simulation framework Simplace.</dt>
+<dd><ul class="first last simple">
+<li>Procedural interface with functions and procedures</li>
+<li>Object oriented interface with objects and methods</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="module-simplace">
+<span id="procedural-interface"></span><h2>Procedural interface<a class="headerlink" href="#module-simplace" title="Permalink to this headline">¶</a></h2>
+<p>Control the simulation framework Simplace.</p>
+<p>You need Java &gt;= 8.0 and the Simplace simulation
+framework <a class="reference external" href="http://www.simplace.net/">http://www.simplace.net/</a></p>
+<p><strong>Example 1</strong> - <em>Running a project:</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">initSimplace</span><span class="p">(</span><span class="s1">&#39;/ws/&#39;</span><span class="p">,</span><span class="s1">&#39;/runs/simulation/&#39;</span><span class="p">,</span><span class="s1">&#39;/out/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">setProjectLines</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">17</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">openProject</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="s1">&#39;/sol/Maize.sol.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;/proj/NRW.proj.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">runProject</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">closeProject</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>Example 2</strong> - <em>Running a solution with changed simulation parameters:</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sp</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">initSimplace</span><span class="p">(</span><span class="s1">&#39;/ws/&#39;</span><span class="p">,</span><span class="s1">&#39;/runs/simulation/&#39;</span><span class="p">,</span><span class="s1">&#39;/out/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">openProject</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="s1">&#39;/sol/Maize.sol.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simid</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">createSimulation</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span> <span class="p">{</span><span class="s1">&#39;vLUE&#39;</span><span class="p">:</span><span class="mf">3.2</span><span class="p">,</span><span class="s1">&#39;vSLA&#39;</span><span class="p">:</span><span class="mf">0.023</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">runSimulations</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">resultToList</span><span class="p">(</span><span class="n">simplace</span><span class="o">.</span><span class="n">getResult</span><span class="p">(</span><span class="n">sp</span><span class="p">,</span><span class="s1">&#39;YearOut&#39;</span><span class="p">,</span><span class="n">simid</span><span class="p">))</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simplace</span><span class="o">.</span><span class="n">closeProject</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;BiomassModule.Yield&#39;</span><span class="p">])</span>
+<span class="go">805.45</span>
+</pre></div>
+</div>
+<dl class="function">
+<dt id="simplace.closeProject">
+<code class="descclassname">simplace.</code><code class="descname">closeProject</code><span class="sig-paren">(</span><em>simplaceInstance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#closeProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.closeProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the project.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.createSimulation">
+<code class="descclassname">simplace.</code><code class="descname">createSimulation</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>parameters=None</em>, <em>queue=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#createSimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.createSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a single simulation and set initial parameters.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.getResult">
+<code class="descclassname">simplace.</code><code class="descname">getResult</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>output</em>, <em>simulation</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#getResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.getResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific output of a finished simulation.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.getSimulationIDs">
+<code class="descclassname">simplace.</code><code class="descname">getSimulationIDs</code><span class="sig-paren">(</span><em>simplaceInstance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#getSimulationIDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.getSimulationIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ids of ready to run simulations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.getUnitsOfResult">
+<code class="descclassname">simplace.</code><code class="descname">getUnitsOfResult</code><span class="sig-paren">(</span><em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#getUnitsOfResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.getUnitsOfResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the list of units of the output variables.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.initSimplace">
+<code class="descclassname">simplace.</code><code class="descname">initSimplace</code><span class="sig-paren">(</span><em>installDir</em>, <em>workDir</em>, <em>outputDir</em>, <em>additionalClasspathList=[]</em>, <em>javaParameters=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#initSimplace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.initSimplace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialisation of Simplace</p>
+<p>Start the java virtual machine and initialize
+the Simplace framework. You have to call this function first.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>installDir</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Where your simplace_core, simplace_modules, simplace_run etc. reside</li>
+<li><strong>workDir</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Working directory for Simplace solutions, projects</li>
+<li><strong>outputDir</strong> (<a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a>) – Output files will be written there</li>
+<li><strong>additionalClasspathList</strong> (<em>Optional</em><em>[</em><em>list</em><em>]</em>) – List with addtional classpath</li>
+<li><strong>javaParameters</strong> (<em>Optional</em><em>[</em><a class="reference external" href="https://docs.python.org/2/library/functions.html#str" title="(in Python v2.7)"><em>str</em></a><em>]</em>) – Parameters passed to the java virtual
+machine</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first"><dl class="docutils">
+<dt>A reference to an instance of SimplaceWrapper</dt>
+<dd><p class="first last">java class</p>
+</dd>
+</dl>
+</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">SimplaceWrapper</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.openProject">
+<code class="descclassname">simplace.</code><code class="descname">openProject</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>solution</em>, <em>project=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#openProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.openProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a project from the solution and optional project file.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.resultToList">
+<code class="descclassname">simplace.</code><code class="descname">resultToList</code><span class="sig-paren">(</span><em>result</em>, <em>expand=True</em>, <em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#resultToList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.resultToList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the output to a python dictionary</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.runProject">
+<code class="descclassname">simplace.</code><code class="descname">runProject</code><span class="sig-paren">(</span><em>simplaceInstance</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#runProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.runProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the project.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.runSimulations">
+<code class="descclassname">simplace.</code><code class="descname">runSimulations</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>selectsimulation=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#runSimulations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.runSimulations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run created simulations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.setCheckLevel">
+<code class="descclassname">simplace.</code><code class="descname">setCheckLevel</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#setCheckLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.setCheckLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the checklevel of the solution.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.setLogLevel">
+<code class="descclassname">simplace.</code><code class="descname">setLogLevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#setLogLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.setLogLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the log’s verbosity. Ranges from least verbose
+‘ERROR’,’WARN’,’INFO’,’DEBUG’ to most verbose ‘TRACE’.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.setProjectLines">
+<code class="descclassname">simplace.</code><code class="descname">setProjectLines</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#setProjectLines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.setProjectLines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the line numbers of the project data file used for simulations.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.setSimulationValues">
+<code class="descclassname">simplace.</code><code class="descname">setSimulationValues</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#setSimulationValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.setSimulationValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set values of actual simulation that runs stepwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.setSlotCount">
+<code class="descclassname">simplace.</code><code class="descname">setSlotCount</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#setSlotCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.setSlotCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the maximum numbers of processors used  when running projects.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.stepSimulation">
+<code class="descclassname">simplace.</code><code class="descname">stepSimulation</code><span class="sig-paren">(</span><em>simplaceInstance</em>, <em>count=1</em>, <em>parameters=None</em>, <em>varFilter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#stepSimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.stepSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run last created simulation stepwise.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="simplace.varmapToList">
+<code class="descclassname">simplace.</code><code class="descname">varmapToList</code><span class="sig-paren">(</span><em>result</em>, <em>expand=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/simplace.html#varmapToList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#simplace.varmapToList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the values of the last simulation step to a python dictionary.</p>
+</dd></dl>
+
+</div>
+<div class="section" id="module-SimplaceClasses">
+<span id="object-oriented-interface"></span><h2>Object oriented interface<a class="headerlink" href="#module-SimplaceClasses" title="Permalink to this headline">¶</a></h2>
+<p>Control the simulation framework Simplace - Object oriented interface.</p>
+<p>It wraps the functions from the simplace package to a class.</p>
+<p>You need Java &gt;= 8.0 and the Simplace simulation
+framework <a class="reference external" href="http://www.simplace.net">http://www.simplace.net</a></p>
+<p><strong>Example 1</strong> - <em>Running a project:</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">SimplaceInstance</span><span class="p">(</span><span class="s1">&#39;/ws/&#39;</span><span class="p">,</span><span class="s1">&#39;/runs/simulation/&#39;</span><span class="p">,</span><span class="s1">&#39;/out/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">setProjectLines</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">8</span><span class="p">,</span><span class="mi">9</span><span class="p">,</span><span class="mi">17</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">openProject</span><span class="p">(</span><span class="s1">&#39;/sol/Maize.sol.xml&#39;</span><span class="p">,</span> <span class="s1">&#39;/proj/NRW.proj.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">runProject</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">closeProject</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Example 2</strong> - <em>Running a solution with changed simulation parameters:</em></p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">simplace</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">SimplaceInstance</span><span class="p">(</span><span class="s1">&#39;/ws/&#39;</span><span class="p">,</span><span class="s1">&#39;/runs/simulation/&#39;</span><span class="p">,</span><span class="s1">&#39;/out/&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">openProject</span><span class="p">(</span><span class="s1">&#39;/sol/Maize.sol.xml&#39;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">simid</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">createSimulation</span><span class="p">({</span><span class="s1">&#39;vLUE&#39;</span><span class="p">:</span><span class="mf">3.2</span><span class="p">,</span><span class="s1">&#39;vSLA&#39;</span><span class="p">:</span><span class="mf">0.023</span><span class="p">})</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">runSimulations</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">result</span> <span class="o">=</span> <span class="n">sim</span><span class="o">.</span><span class="n">getResult</span><span class="p">(</span><span class="s1">&#39;YearlyOutput&#39;</span><span class="p">,</span><span class="n">simid</span><span class="p">))</span><span class="o">.</span><span class="n">toList</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim</span><span class="o">.</span><span class="n">closeProject</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="s1">&#39;BiomassModule.Yield&#39;</span><span class="p">])</span>
+<span class="go">805.45</span>
+</pre></div>
+</div>
+<dl class="class">
+<dt id="SimplaceClasses.SimplaceInstance">
+<em class="property">class </em><code class="descclassname">SimplaceClasses.</code><code class="descname">SimplaceInstance</code><span class="sig-paren">(</span><em>installDir</em>, <em>workDir</em>, <em>outputDir</em>, <em>additionalClasspathList=[]</em>, <em>javaParameters=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to access and control the simulation Framework Simplace</p>
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.closeProject">
+<code class="descname">closeProject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.closeProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.closeProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Close the project.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.createSimulation">
+<code class="descname">createSimulation</code><span class="sig-paren">(</span><em>parameters=None</em>, <em>queue=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.createSimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.createSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a single simulation and set initial parameters.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.getResult">
+<code class="descname">getResult</code><span class="sig-paren">(</span><em>output</em>, <em>simulation</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.getResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.getResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a specific output of a finished simulation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.getSimulationIDs">
+<code class="descname">getSimulationIDs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.getSimulationIDs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.getSimulationIDs" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the ids of ready to run simulations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.openProject">
+<code class="descname">openProject</code><span class="sig-paren">(</span><em>solution</em>, <em>project=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.openProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.openProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a project from the solution and optional project file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.runProject">
+<code class="descname">runProject</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.runProject"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.runProject" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run the project.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.runSimulations">
+<code class="descname">runSimulations</code><span class="sig-paren">(</span><em>selectsimulation=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.runSimulations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.runSimulations" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run created simulations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.setCheckLevel">
+<code class="descname">setCheckLevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.setCheckLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.setCheckLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the checklevel of the solution.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.setLogLevel">
+<code class="descname">setLogLevel</code><span class="sig-paren">(</span><em>level</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.setLogLevel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.setLogLevel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the log’s verbosity. Ranges from least verbose
+‘ERROR’,’WARN’,’INFO’,’DEBUG’ to most verbose ‘TRACE’.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.setProjectLines">
+<code class="descname">setProjectLines</code><span class="sig-paren">(</span><em>lines</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.setProjectLines"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.setProjectLines" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the line numbers of the project data file used for simulations.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.setSimulationValues">
+<code class="descname">setSimulationValues</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.setSimulationValues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.setSimulationValues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set values of actual simulation that runs stepwise.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.setSlotCount">
+<code class="descname">setSlotCount</code><span class="sig-paren">(</span><em>count</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.setSlotCount"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.setSlotCount" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the maximum numbers of processors used  when running projects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceInstance.stepSimulation">
+<code class="descname">stepSimulation</code><span class="sig-paren">(</span><em>count=1</em>, <em>parameters=None</em>, <em>varFilter=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceInstance.stepSimulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceInstance.stepSimulation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run last created simulation stepwise and return variable map.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="SimplaceClasses.SimplaceResult">
+<em class="property">class </em><code class="descclassname">SimplaceClasses.</code><code class="descname">SimplaceResult</code><span class="sig-paren">(</span><em>result</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceResult"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceResult" title="Permalink to this definition">¶</a></dt>
+<dd><p>Result of a Simplace simulation. Returned by getResult() method.</p>
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceResult.getUnits">
+<code class="descname">getUnits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceResult.getUnits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceResult.getUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get units of the result values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceResult.toList">
+<code class="descname">toList</code><span class="sig-paren">(</span><em>expand=True</em>, <em>start=None</em>, <em>end=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceResult.toList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceResult.toList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the result as python dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="SimplaceClasses.SimplaceVarmap">
+<em class="property">class </em><code class="descclassname">SimplaceClasses.</code><code class="descname">SimplaceVarmap</code><span class="sig-paren">(</span><em>varmap</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceVarmap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceVarmap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Actual Varmap from a simplace step run. Returned by step() method.</p>
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceVarmap.getUnits">
+<code class="descname">getUnits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceVarmap.getUnits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceVarmap.getUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get units of the varmap values.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="SimplaceClasses.SimplaceVarmap.toList">
+<code class="descname">toList</code><span class="sig-paren">(</span><em>expand=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/SimplaceClasses.html#SimplaceVarmap.toList"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#SimplaceClasses.SimplaceVarmap.toList" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the varmap as python dictionary.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+<div class="section" id="troubleshooting">
+<h1>Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permalink to this headline">¶</a></h1>
+<p>For Python 2.x simplace requires the package JPype1, for Python 3.x it requires JPype1-py3.
+If it is not installed automatically, try to install JPype manually.
+JPype1 optionally needs the package numpy. If you can’t install numpy, then try to
+install JPype1 manually without numpy support.</p>
+<p>You need also the Microsoft Visual C++ 2015 Redistributables. If they are not yet installed
+on your system, you have to do it manually.</p>
+<p>Simplace needs a Java virtual machine. If you have 64 bit version of Python, then
+you need also the 64 bit version of Java.</p>
+<p>If you get an error loading the java virtual machine, check if the java location is configured
+properly. There are different methods how python tries to detect the java virtual machine:</p>
+<ul class="simple">
+<li>JAVA_HOME environment variable</li>
+<li>Registry entry HKEY_LOCAL_MACHINE/SOFTWARE/JavaSoft/Java Runtime Environment/1.8[.xx]/RuntimeLib on Windows</li>
+<li>the symbolic link /usr/lib/jvm/default-java on Ubuntu</li>
+<li>…</li>
+</ul>
+</div>
+<div class="section" id="version-history">
+<h1>Version history<a class="headerlink" href="#version-history" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="version-4-0-1">
+<h3>Version 4.0.1<a class="headerlink" href="#version-4-0-1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Replaced dependency from JPype1-py3 with JPype1 for python 3.x</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-4-0-0">
+<h3>Version 4.0.0<a class="headerlink" href="#version-4-0-0" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Compatible with Simplace V4.0</li>
+<li>Increased version number to have the same version as Simplace</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-6">
+<h3>Version 0.2.6<a class="headerlink" href="#version-0-2-6" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Compatible with Simplace V3.4</li>
+<li>Corrected documentation.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-5">
+<h3>Version 0.2.5<a class="headerlink" href="#version-0-2-5" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Add all jars from lib directory to classpath for better forward compatibility.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-4">
+<h3>Version 0.2.4<a class="headerlink" href="#version-0-2-4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Compatible with new Simplace rule engine (jexl 3)</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-3">
+<h3>Version 0.2.3<a class="headerlink" href="#version-0-2-3" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Compatible with Simplace V3.3</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-2">
+<h3>Version 0.2.2<a class="headerlink" href="#version-0-2-2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Added class SimplaceInstance for object oriented approach.</li>
+<li>Added Changelog file.</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-1">
+<h3>Version 0.2.1<a class="headerlink" href="#version-0-2-1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Improved documentation</li>
+<li>Bugfixes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-2-0">
+<h3>Version 0.2.0<a class="headerlink" href="#version-0-2-0" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-9">
+<h3>Version 0.1.9<a class="headerlink" href="#version-0-1-9" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-8">
+<h3>Version 0.1.8<a class="headerlink" href="#version-0-1-8" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Added documentation</li>
+<li>Added classifiers in package description</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-7">
+<h3>Version 0.1.7<a class="headerlink" href="#version-0-1-7" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-6">
+<h3>Version 0.1.6<a class="headerlink" href="#version-0-1-6" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Compatible with Python 2.x and Python 3.x</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-5">
+<h3>Version 0.1.5<a class="headerlink" href="#version-0-1-5" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-4">
+<h3>Version 0.1.4<a class="headerlink" href="#version-0-1-4" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-3">
+<h3>Version 0.1.3<a class="headerlink" href="#version-0-1-3" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-2">
+<h3>Version 0.1.2<a class="headerlink" href="#version-0-1-2" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1-1">
+<h3>Version 0.1.1<a class="headerlink" href="#version-0-1-1" title="Permalink to this headline">¶</a></h3>
+<blockquote>
+<div><ul class="simple">
+<li>Small changes</li>
+</ul>
+</div></blockquote>
+</div>
+<div class="section" id="version-0-1">
+<h3>Version 0.1<a class="headerlink" href="#version-0-1" title="Permalink to this headline">¶</a></h3>
+<p>Initial version</p>
+</div>
+</div>
+</div>
+<div class="section" id="indices-and-tables">
+<h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
+<ul class="simple">
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
+</ul>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="#">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Simplace’s documentation!</a><ul>
+<li><a class="reference internal" href="#module-simplace">Procedural interface</a></li>
+<li><a class="reference internal" href="#module-SimplaceClasses">Object oriented interface</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#troubleshooting">Troubleshooting</a></li>
+<li><a class="reference internal" href="#version-history">Version history</a><ul>
+<li><a class="reference internal" href="#changelog">Changelog</a><ul>
+<li><a class="reference internal" href="#version-4-0-1">Version 4.0.1</a></li>
+<li><a class="reference internal" href="#version-4-0-0">Version 4.0.0</a></li>
+<li><a class="reference internal" href="#version-0-2-6">Version 0.2.6</a></li>
+<li><a class="reference internal" href="#version-0-2-5">Version 0.2.5</a></li>
+<li><a class="reference internal" href="#version-0-2-4">Version 0.2.4</a></li>
+<li><a class="reference internal" href="#version-0-2-3">Version 0.2.3</a></li>
+<li><a class="reference internal" href="#version-0-2-2">Version 0.2.2</a></li>
+<li><a class="reference internal" href="#version-0-2-1">Version 0.2.1</a></li>
+<li><a class="reference internal" href="#version-0-2-0">Version 0.2.0</a></li>
+<li><a class="reference internal" href="#version-0-1-9">Version 0.1.9</a></li>
+<li><a class="reference internal" href="#version-0-1-8">Version 0.1.8</a></li>
+<li><a class="reference internal" href="#version-0-1-7">Version 0.1.7</a></li>
+<li><a class="reference internal" href="#version-0-1-6">Version 0.1.6</a></li>
+<li><a class="reference internal" href="#version-0-1-5">Version 0.1.5</a></li>
+<li><a class="reference internal" href="#version-0-1-4">Version 0.1.4</a></li>
+<li><a class="reference internal" href="#version-0-1-3">Version 0.1.3</a></li>
+<li><a class="reference internal" href="#version-0-1-2">Version 0.1.2</a></li>
+<li><a class="reference internal" href="#version-0-1-1">Version 0.1.1</a></li>
+<li><a class="reference internal" href="#version-0-1">Version 0.1</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
+</ul>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="#">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Gunther Krauss.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+      |
+      <a href="_sources/index.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

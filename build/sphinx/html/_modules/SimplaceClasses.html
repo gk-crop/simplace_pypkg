@@ -1,0 +1,215 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SimplaceClasses &#8212; simplace 4.0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '4.0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head>
+  <body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for SimplaceClasses</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Control the simulation framework Simplace - Object oriented interface.</span>
+
+<span class="sd">It wraps the functions from the simplace package to a class.</span>
+
+<span class="sd">You need Java &gt;= 8.0 and the Simplace simulation </span>
+<span class="sd">framework http://www.simplace.net</span>
+
+<span class="sd">**Example 1** - *Running a project:*</span>
+
+<span class="sd">    &gt;&gt;&gt; import simplace</span>
+<span class="sd">    &gt;&gt;&gt; sim = simplace.SimplaceInstance(&#39;/ws/&#39;,&#39;/runs/simulation/&#39;,&#39;/out/&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; sim.setProjectLines([1,3,8,9,17])</span>
+<span class="sd">    &gt;&gt;&gt; sim.openProject(&#39;/sol/Maize.sol.xml&#39;, &#39;/proj/NRW.proj.xml&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; sim.runProject()</span>
+<span class="sd">    &gt;&gt;&gt; sim.closeProject()</span>
+
+<span class="sd">**Example 2** - *Running a solution with changed simulation parameters:*</span>
+
+<span class="sd">    &gt;&gt;&gt; import simplace</span>
+<span class="sd">    &gt;&gt;&gt; sim = simplace.SimplaceInstance(&#39;/ws/&#39;,&#39;/runs/simulation/&#39;,&#39;/out/&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; sim.openProject(&#39;/sol/Maize.sol.xml&#39;)</span>
+<span class="sd">    &gt;&gt;&gt; simid = sim.createSimulation({&#39;vLUE&#39;:3.2,&#39;vSLA&#39;:0.023})</span>
+<span class="sd">    &gt;&gt;&gt; sim.runSimulations()</span>
+<span class="sd">    &gt;&gt;&gt; result = sim.getResult(&#39;YearlyOutput&#39;,simid)).toList()</span>
+<span class="sd">    &gt;&gt;&gt; sim.closeProject()</span>
+<span class="sd">    &gt;&gt;&gt; print(result[&#39;BiomassModule.Yield&#39;])</span>
+<span class="sd">    805.45</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">simplace</span>
+
+<div class="viewcode-block" id="SimplaceInstance"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance">[docs]</a><span class="k">class</span> <span class="nc">SimplaceInstance</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class to access and control the simulation Framework Simplace&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">installDir</span><span class="p">,</span> <span class="n">workDir</span><span class="p">,</span> <span class="n">outputDir</span><span class="p">,</span> 
+                 <span class="n">additionalClasspathList</span> <span class="o">=</span><span class="p">[],</span> <span class="n">javaParameters</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_sh</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">initSimplace</span><span class="p">(</span><span class="n">installDir</span><span class="p">,</span> <span class="n">workDir</span><span class="p">,</span> <span class="n">outputDir</span><span class="p">,</span> 
+                                  <span class="n">additionalClasspathList</span><span class="p">,</span> <span class="n">javaParameters</span><span class="p">)</span>
+        
+<div class="viewcode-block" id="SimplaceInstance.openProject"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.openProject">[docs]</a>    <span class="k">def</span> <span class="nf">openProject</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">solution</span><span class="p">,</span> <span class="n">project</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a project from the solution and optional project file.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">openProject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">solution</span><span class="p">,</span> <span class="n">project</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.closeProject"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.closeProject">[docs]</a>    <span class="k">def</span> <span class="nf">closeProject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the project.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">closeProject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.runProject"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.runProject">[docs]</a>    <span class="k">def</span> <span class="nf">runProject</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run the project.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">runProject</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.setProjectLines"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.setProjectLines">[docs]</a>    <span class="k">def</span> <span class="nf">setProjectLines</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lines</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the line numbers of the project data file used for simulations.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">setProjectLines</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">lines</span><span class="p">)</span></div>
+        
+    
+    
+<div class="viewcode-block" id="SimplaceInstance.createSimulation"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.createSimulation">[docs]</a>    <span class="k">def</span> <span class="nf">createSimulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">queue</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a single simulation and set initial parameters.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">simplace</span><span class="o">.</span><span class="n">createSimulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">queue</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.getSimulationIDs"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.getSimulationIDs">[docs]</a>    <span class="k">def</span> <span class="nf">getSimulationIDs</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get the ids of ready to run simulations.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">simplace</span><span class="o">.</span><span class="n">getSimulationIDs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.setSimulationValues"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.setSimulationValues">[docs]</a>    <span class="k">def</span> <span class="nf">setSimulationValues</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set values of actual simulation that runs stepwise.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">setSimulationValues</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">parameters</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="SimplaceInstance.runSimulations"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.runSimulations">[docs]</a>    <span class="k">def</span> <span class="nf">runSimulations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">selectsimulation</span> <span class="o">=</span> <span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run created simulations.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">runSimulations</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">selectsimulation</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.stepSimulation"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.stepSimulation">[docs]</a>    <span class="k">def</span> <span class="nf">stepSimulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">parameters</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">varFilter</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Run last created simulation stepwise and return variable map.&quot;&quot;&quot;</span>
+        <span class="n">varmap</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">stepSimulation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">count</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">varFilter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SimplaceVarmap</span><span class="p">(</span><span class="n">varmap</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.getResult"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.getResult">[docs]</a>    <span class="k">def</span> <span class="nf">getResult</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">simulation</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get a specific output of a finished simulation.&quot;&quot;&quot;</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">simplace</span><span class="o">.</span><span class="n">getResult</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">output</span><span class="p">,</span> <span class="n">simulation</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">SimplaceResult</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>    </div>
+    
+    
+<div class="viewcode-block" id="SimplaceInstance.setLogLevel"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.setLogLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setLogLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the log&#39;s verbosity. Ranges from least verbose </span>
+<span class="sd">            &#39;ERROR&#39;,&#39;WARN&#39;,&#39;INFO&#39;,&#39;DEBUG&#39; to most verbose &#39;TRACE&#39;.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">setLogLevel</span><span class="p">(</span><span class="n">level</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.setCheckLevel"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.setCheckLevel">[docs]</a>    <span class="k">def</span> <span class="nf">setCheckLevel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the checklevel of the solution.&quot;&quot;&quot;</span>
+        <span class="n">simplace</span><span class="o">.</span><span class="n">setCheckLevel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_sh</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="SimplaceInstance.setSlotCount"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceInstance.setSlotCount">[docs]</a>    <span class="k">def</span> <span class="nf">setSlotCount</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">count</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the maximum numbers of processors used  when running projects.&quot;&quot;&quot;</span>   
+        <span class="n">simplace</span><span class="o">.</span><span class="n">setSlotCount</span><span class="p">(</span><span class="n">count</span><span class="p">)</span></div></div>
+        
+            
+    
+<div class="viewcode-block" id="SimplaceResult"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceResult">[docs]</a><span class="k">class</span> <span class="nc">SimplaceResult</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Result of a Simplace simulation. Returned by getResult() method.&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rs</span> <span class="o">=</span> <span class="n">result</span> 
+               
+<div class="viewcode-block" id="SimplaceResult.toList"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceResult.toList">[docs]</a>    <span class="k">def</span> <span class="nf">toList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span> <span class="n">start</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the result as python dictionary.&quot;&quot;&quot;</span>      
+        <span class="k">return</span> <span class="n">simplace</span><span class="o">.</span><span class="n">resultToList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rs</span><span class="p">,</span> <span class="n">expand</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">)</span>  </div>
+<div class="viewcode-block" id="SimplaceResult.getUnits"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceResult.getUnits">[docs]</a>    <span class="k">def</span> <span class="nf">getUnits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get units of the result values.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">simplace</span><span class="o">.</span><span class="n">getUnitsOfResult</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rs</span><span class="p">)</span>    </div></div>
+    
+
+
+<div class="viewcode-block" id="SimplaceVarmap"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceVarmap">[docs]</a><span class="k">class</span> <span class="nc">SimplaceVarmap</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Actual Varmap from a simplace step run. Returned by step() method.&quot;&quot;&quot;</span>    
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">varmap</span><span class="p">):</span> 
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rs</span> <span class="o">=</span> <span class="n">varmap</span> 
+        
+<div class="viewcode-block" id="SimplaceVarmap.toList"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceVarmap.toList">[docs]</a>    <span class="k">def</span> <span class="nf">toList</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expand</span> <span class="o">=</span> <span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot; Return the varmap as python dictionary.&quot;&quot;&quot;</span>   
+        <span class="k">return</span> <span class="n">simplace</span><span class="o">.</span><span class="n">varmapToList</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rs</span><span class="p">,</span> <span class="n">expand</span><span class="p">)</span>    </div>
+        
+<div class="viewcode-block" id="SimplaceVarmap.getUnits"><a class="viewcode-back" href="../index.html#SimplaceClasses.SimplaceVarmap.getUnits">[docs]</a>    <span class="k">def</span> <span class="nf">getUnits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Get units of the varmap values.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">simplace</span><span class="o">.</span><span class="n">getUnitsOfResult</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rs</span><span class="p">)</span>    </div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper"><div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, Gunther Krauss.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
+      
+    </div>
+
+    
+
+    
+  </body>
+</html>

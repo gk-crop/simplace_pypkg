@@ -1,0 +1,34 @@
+Metadata-Version: 1.1
+Name: simplace
+Version: 4.0.1
+Summary: Interact with the simulation framework Simplace
+Home-page: http://www.simplace.net/
+Author: Gunther Krauss
+Author-email: guntherkrauss@ui-bonn.de
+License: GPL3
+Description: Run and control simulations in the simulation framework Simplace.
+        
+        You need to install the Simplace simulation 
+        framework http://www.simplace.net/
+        
+        Example usage:
+        
+            >>> import simplace
+            >>> sh = simplace.initSimplace('/ws/','/runs/simulation/','/out/')
+            >>> simplace.openProject(sh, '/sol/Maize.sol.xml')
+            >>> simid = simplace.createSimulation(sh, {'vLUE':3.2,'vSLA':0.023})
+            >>> simplace.runSimulations(sh)
+            >>> result = simplace.resultToList(simplace.getResult(sh,'YearOut',simid))
+            >>> simplace.closeProject(sh)
+            >>> print(result['BiomassModule.Yield'])
+            805.45
+            
+        The module requires Java >= 8.0 and an appropriate JPype1 package.
+        
+Platform: UNKNOWN
+Classifier: Development Status :: 4 - Beta
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Topic :: Scientific/Engineering
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Java
