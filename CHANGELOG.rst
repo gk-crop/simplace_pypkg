@@ -1,3 +1,7 @@
+Version 4.0.3
+~~~~~~~~~~~~~
+ * Added documentation link
+
 Version 4.0.2
 ~~~~~~~~~~~~~
  * Moved documentation to ReadTheDocs

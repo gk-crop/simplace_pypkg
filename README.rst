@@ -1,3 +1,5 @@
+See the documentation at https://simplace.readthedocs.io/
+
 Run and control simulations in the simulation framework Simplace.
 
 You need to install the Simplace simulation 
@@ -15,4 +17,4 @@ Example usage:
     >>> print(result['BiomassModule.Yield'])
     805.45
     
-The module requires Java >= 8.0 and an appropriate JPype1 package.
+The module requires Java >= 8.0 and JPype1.
