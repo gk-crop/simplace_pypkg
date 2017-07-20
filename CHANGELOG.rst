@@ -1,3 +1,8 @@
+Version 4.0.2
+~~~~~~~~~~~~~
+ * Moved documentation to ReadTheDocs
+ * Updated documentation regarding dependencies
+
 Version 4.0.1
 ~~~~~~~~~~~~~
  * Replaced dependency from JPype1-py3 with JPype1 for python 3.x

@@ -30,10 +30,11 @@ Object oriented interface
 Troubleshooting
 ================
 
-For Python 2.x simplace requires the package JPype1, for Python 3.x it requires JPype1-py3.
+Simplace requires the package JPype1.
 If it is not installed automatically, try to install JPype manually. 
 JPype1 optionally needs the package numpy. If you can't install numpy, then try to 
-install JPype1 manually without numpy support.
+install JPype1 manually without numpy support. For Windows you can use binary packages
+from http://www.lfd.uci.edu/~gohlke/pythonlibs/
 
 You need also the Microsoft Visual C++ 2015 Redistributables. If they are not yet installed
 on your system, you have to do it manually.

@@ -64,7 +64,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'simplace'
-copyright = '2015, Gunther Krauss'
+copyright = '2017, Gunther Krauss'
 author = 'Gunther Krauss'
 
 # The version info for the project you're documenting, acts as replacement for
