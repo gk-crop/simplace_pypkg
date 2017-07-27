@@ -1,5 +1,8 @@
 Simplace's documentation!
 ====================================
+
+.. toctree::
+   :maxdepth: 2
    
 The package offers two interfaces to the simulation framework Simplace. 
  - Procedural interface with functions and procedures
@@ -17,7 +20,6 @@ Object oriented interface
 
 .. automodule:: SimplaceClasses
    :members:
-
 
 Troubleshooting
 ================
@@ -54,6 +56,6 @@ Indices and tables
 
 .. toctree::
    :maxdepth: 2
-   :caption: Version History
+   :caption: Version history
    
    changelog
