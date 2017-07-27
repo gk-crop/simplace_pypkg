@@ -1,11 +1,14 @@
+.. simplace documentation master file, created by
+   sphinx-quickstart on Thu Oct  8 11:03:22 2015.
+   You can adapt this file completely to your liking, but it should at least
+   contain the root `toctree` directive.
+
 Simplace's documentation!
 ====================================
 
-.. _simplacedoc:
-
 .. toctree::
-   :caption: Simplace documentation
    :maxdepth: 2
+    
    
 The package offers two interfaces to the simulation framework Simplace. 
  - Procedural interface with functions and procedures
