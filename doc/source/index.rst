@@ -1,7 +1,10 @@
 Simplace's documentation!
 ====================================
 
+.. _simplacedoc:
+
 .. toctree::
+   :caption: Simplace documentation
    :maxdepth: 2
    
 The package offers two interfaces to the simulation framework Simplace. 
