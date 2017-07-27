@@ -1,15 +1,6 @@
-.. simplace documentation master file, created by
-   sphinx-quickstart on Thu Oct  8 11:03:22 2015.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
 Simplace's documentation!
 ====================================
-
-.. toctree::
-   :maxdepth: 2
    
-
 The package offers two interfaces to the simulation framework Simplace. 
  - Procedural interface with functions and procedures
  - Object oriented interface with objects and methods    
@@ -26,6 +17,7 @@ Object oriented interface
 
 .. automodule:: SimplaceClasses
    :members:
+
 
 Troubleshooting
 ================
@@ -50,13 +42,7 @@ properly. There are different methods how python tries to detect the java virtua
 - the symbolic link /usr/lib/jvm/default-java on Ubuntu
 - ...
 
-Version history
-===============
-
-Changelog
----------
-.. include:: ../../CHANGELOG.rst
-
+  
 	
 Indices and tables
 ==================
@@ -64,3 +50,10 @@ Indices and tables
 * :ref:`genindex`
 * :ref:`search`
 
+.. _changelog:
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Version History
+   
+   changelog
