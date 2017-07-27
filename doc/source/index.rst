@@ -59,9 +59,5 @@ Indices and tables
 * :ref:`search`
 
 .. _changelog:
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Version history
    
    changelog
