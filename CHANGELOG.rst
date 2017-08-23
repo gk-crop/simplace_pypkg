@@ -1,3 +1,7 @@
+Version 4.1.0
+~~~~~~~~~~~~~
+ * Compatible with Simplace V4.1
+
 Version 4.0.3
 ~~~~~~~~~~~~~
  * Added documentation link
