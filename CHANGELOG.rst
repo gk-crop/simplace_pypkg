@@ -1,3 +1,7 @@
+Version 4.1.1
+~~~~~~~~~~~~~
+ * Convert int to java.lang.Integer to work around JPype's wrong conversion to long.
+
 Version 4.1.0
 ~~~~~~~~~~~~~
  * Compatible with Simplace V4.1

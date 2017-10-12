@@ -54,10 +54,10 @@ def initSimplace (installDir, workDir, outputDir,
     
     """
     
-    cpliblist = [os.path.join(directory,file) 
+    cpliblist = [os.path.join(directory,filenm) 
                 for directory, _, files in os.walk(os.path.join(installDir,"simplace_core","lib")) 
-                    for file in files 
-                        if file.lower().endswith('.jar')]
+                    for filenm in files 
+                        if filenm.lower().endswith('.jar')]
     
     cplist = [
         'simplace_core/build/classes',
@@ -218,4 +218,7 @@ def _getScalarOrList(obj):
         else:
             return jpype.JArray(jpype.JDouble, 1)(obj)
     else:
-        return obj
+        if type(obj) is int :
+            return jpype.java.lang.Integer(obj)
+        else:
+            return obj
