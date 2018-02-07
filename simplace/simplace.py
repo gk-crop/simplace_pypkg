@@ -163,6 +163,17 @@ def getUnitsOfResult(result):
 
 # Configuration
 
+def setSimplaceDirectories(simplaceInstance, 
+                           workDir = None, outputDir = None, 
+                           projectsDir = None, dataDir = None):
+    """Set work-, output-, projects- and data-directory."""   
+    simplaceInstance.setDirectories(workDir, outputDir, projectsDir, dataDir)  
+
+def getSimplaceDirectories(simplaceInstance):
+    """Get work-, output-, projects- and data-directory.""" 
+    names = ["_WORKDIR_", "_OUTPUTDIR_", "_PROJECTSDIR_", "_DATADIR_"]
+    return dict(zip(names, simplaceInstance.getDirectories()))  
+
 def setSlotCount(count):
     """Set the maximum numbers of processors used  when running projects."""   
     jpype.JClass('net.simplace.sim.FWSimEngine').setSlotCount(count)  

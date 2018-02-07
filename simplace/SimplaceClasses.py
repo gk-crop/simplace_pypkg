@@ -84,6 +84,18 @@ class SimplaceInstance:
         return SimplaceResult(result)    
     
     
+    def getSimplaceDirectories(self):
+        """get work-, output-, projects- and data-directory."""   
+        return simplace.getSimplaceDirectories(self._sh)
+
+    def setSimplaceDirectories(self, 
+                               workDir = None, outputDir = None,
+                               projectsDir = None, dataDir = None):
+        """Set work-, output-, projects- and data-directory."""   
+        simplace.getSimplaceDirectories(self._sh,
+                                        workDir, outputDir, 
+                                        projectsDir, dataDir)
+    
     def setLogLevel(self, level):
         """Set the log's verbosity. Ranges from least verbose 
             'ERROR','WARN','INFO','DEBUG' to most verbose 'TRACE'.

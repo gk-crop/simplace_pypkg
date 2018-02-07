@@ -1,3 +1,8 @@
+Version 4.2.0
+~~~~~~~~~~~~~
+ * Compatible with Simplace 4.2
+ * Methods to set and get directories (workdir, outputdir etc.)
+
 Version 4.1.1
 ~~~~~~~~~~~~~
  * Convert int to java.lang.Integer to work around JPype's wrong conversion to long.
