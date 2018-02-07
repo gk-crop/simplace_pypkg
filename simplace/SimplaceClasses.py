@@ -35,9 +35,11 @@ class SimplaceInstance:
     """Class to access and control the simulation Framework Simplace"""
     
     def __init__(self, installDir, workDir, outputDir, 
+                projectsDir=None, dataDir=None,
                  additionalClasspathList =[], javaParameters = ''):
         self._sh = simplace.initSimplace(installDir, workDir, outputDir, 
-                                  additionalClasspathList, javaParameters)
+                                 projectsDir, dataDir,
+                                 additionalClasspathList, javaParameters)
         
     def openProject(self, solution, project = None):
         """Create a project from the solution and optional project file."""

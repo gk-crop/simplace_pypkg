@@ -33,7 +33,8 @@ import os
 
 # Initialisation
 
-def initSimplace (installDir, workDir, outputDir, 
+def initSimplace (installDir, workDir, outputDir,
+                  projectsDir = None, dataDir = None, 
                   additionalClasspathList=[], javaParameters=''):   
     """Initialisation of Simplace 
     
@@ -44,6 +45,8 @@ def initSimplace (installDir, workDir, outputDir,
         installDir (str): Where your simplace_core, simplace_modules, simplace_run etc. reside
         workDir (str): Working directory for Simplace solutions, projects
         outputDir (str): Output files will be written there
+        projectsDir (Optional[str]): Optional folder for project data
+        dataDir (Optional[str]): Optional folder for input data
         additionalClasspathList (Optional[list]): List with addtional classpath
         javaParameters (Optional[str]): Parameters passed to the java virtual 
             machine
@@ -75,7 +78,7 @@ def initSimplace (installDir, workDir, outputDir,
     
     jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters)
     Wrapper = jpype.JClass('net.simplace.sim.wrapper.SimplaceWrapper')
-    simplaceInstance = Wrapper(workDir,outputDir)
+    simplaceInstance = Wrapper(workDir, outputDir, projectsDir, dataDir)
     return simplaceInstance
 
 

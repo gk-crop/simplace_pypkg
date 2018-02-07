@@ -1,3 +1,7 @@
+Version 4.2.1
+~~~~~~~~~~~~~
+ * Set project- and datadir optionally on init
+
 Version 4.2.0
 ~~~~~~~~~~~~~
  * Compatible with Simplace 4.2
