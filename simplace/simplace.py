@@ -121,15 +121,25 @@ def getSimulationIDs(simplaceInstance):
 def setSimulationValues(simplaceInstance, parameters):
     """Set values of actual simulation that runs stepwise."""
     simplaceInstance.setSimulationValues(_parameterListToArray(parameters))
+    
+def setAllSimulationValues(simplaceInstance, parameterlist):
+    """Set values of all simulations in queue."""
+    simplaceInstance.setAllSimulationValues(_parameterListsToArray(parameterlist))
 
 def runSimulations(simplaceInstance, selectsimulation = False):
     """Run created simulations."""
     simplaceInstance.runSimulations(selectsimulation)
 
-def stepSimulation(simplaceInstance, count=1, parameters=None, varFilter=None):
-    """Run last created simulation stepwise."""
+def stepSimulation(simplaceInstance, count=1, parameters=None, varFilter=None, 
+                   simulationnumber=0):
+    """Run specific simulation stepwise (default first simulation in queue)."""
     par = _parameterListToArray(parameters)
-    return simplaceInstance.step(par,varFilter,count)
+    return simplaceInstance.stepSpecific(simulationnumber, par, varFilter,count)
+
+def stepAllSimulations(simplaceInstance, count=1, parameterlist=None, varFilter=None):
+    """Run all simulations in queue stepwise."""
+    par = _parameterListsToArray(parameterlist)
+    return simplaceInstance.stepAll(par,varFilter,count)
 
 
 # Fetch results and convert it to python objects.
@@ -224,6 +234,15 @@ def _parameterListToArray(parameter):
     else:
         return jpype.JArray(jpype.java.lang.Object, 2)(
           [[k, _getScalarOrList(v)] for k, v in parameter.items()])
+
+def _parameterListsToArray(parameterlist):
+    if parameterlist is None:
+        return None
+    else:
+        return jpype.JArray(jpype.java.lang.Object, 3)(
+          [[[k, _getScalarOrList(v)] for k, v in par.items()] 
+           for par in parameterlist])
+
     
 def _getScalarOrList(obj):
     if type(obj) is list:

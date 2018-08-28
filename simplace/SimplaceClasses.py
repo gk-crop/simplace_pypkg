@@ -70,15 +70,27 @@ class SimplaceInstance:
     def setSimulationValues(self, parameters):
         """Set values of actual simulation that runs stepwise."""
         simplace.setSimulationValues(self._sh, parameters)
+
+    def setAllSimulationValues(self, parameterlist):
+        """Set values of all simulations in queue."""
+        simplace.setAllSimulationValues(self._sh, parameterlist)
     
     def runSimulations(self, selectsimulation = False):
         """Run created simulations."""
         simplace.runSimulations(self._sh, selectsimulation)
         
-    def stepSimulation(self, count = 1, parameters = None, varFilter = None):
-        """Run last created simulation stepwise and return variable map."""
-        varmap = simplace.stepSimulation(self._sh, count, parameters, varFilter)
+    def stepSimulation(self, count = 1, parameters = None, varFilter = None,
+                       simulationnumber = 0):
+        """Run specific simulation in queue stepwise and return variable map."""
+        varmap = simplace.stepSimulation(self._sh, count, parameters, 
+                                         varFilter, simulationnumber)
         return SimplaceVarmap(varmap)
+
+    def stepAllSimulations(self, count = 1, parameterlist = None, varFilter = None):
+        """Run al simulations in queue stepwise and return variable map list."""
+        varmaps = simplace.stepAllSimulations(self._sh, count, parameterlist, 
+                                         varFilter)
+        return [SimplaceVarmap(varmap) for varmap in varmaps]
         
     def getResult(self, output, simulation):
         """Get a specific output of a finished simulation."""

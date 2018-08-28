@@ -1,3 +1,7 @@
+Version 4.2.2
+~~~~~~~~~~~~~
+ * Step through all simulations in queue
+
 Version 4.2.1
 ~~~~~~~~~~~~~
  * Set project- and datadir optionally on init
