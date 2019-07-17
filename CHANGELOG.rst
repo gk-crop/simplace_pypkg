@@ -1,3 +1,8 @@
+Version 4.3.0
+~~~~~~~~~~~~~
+ * Compatible with Simplace 4.3
+ * Compatible with JPype1 >= 0.7
+
 Version 4.2.2
 ~~~~~~~~~~~~~
  * Step through all simulations in queue

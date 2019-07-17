@@ -75,8 +75,10 @@ def initSimplace (installDir, workDir, outputDir,
     allcplist = fullpathcplist + cpliblist + additionalClasspathList
     cpstring = os.pathsep.join(allcplist)
     cp = '-Djava.class.path='+cpstring
-    
-    jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters)
+    if hasattr(jpype,'__version_info__') and (jpype.__version_info__[0]>0 or jpype.__version_info__[1]>6) :
+        jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters, ignoreUnrecognized=True, convertStrings=False)
+    else :
+        jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters)
     Wrapper = jpype.JClass('net.simplace.sim.wrapper.SimplaceWrapper')
     simplaceInstance = Wrapper(workDir, outputDir, projectsDir, dataDir)
     return simplaceInstance
@@ -112,11 +114,11 @@ def createSimulation(simplaceInstance, parameters = None, queue=True):
     """Create a single simulation and set initial parameters."""
     par = _parameterListToArray(parameters)
     simplaceInstance.createSimulation(par)
-    return getSimulationIDs(simplaceInstance)[-1]
+    return str(getSimulationIDs(simplaceInstance)[-1])
 
 def getSimulationIDs(simplaceInstance):
     """Get the ids of ready to run simulations."""
-    return list(simplaceInstance.getSimulationIDs())
+    return [str(s) for s in simplaceInstance.getSimulationIDs()]
 
 def setSimulationValues(simplaceInstance, parameters):
     """Set values of actual simulation that runs stepwise."""
@@ -154,23 +156,23 @@ def resultToList(result, expand = True, start=None, end=None):
         obj =  result.getDataObjects(start, end)
     else :
         obj =  result.getDataObjects()
-    names = result.getHeaderStrings()
-    types = result.getTypeStrings()
+    names = [str(s) for s in result.getHeaderStrings()]
+    types = [str(s) for s in result.getTypeStrings()]
     val = [_objectArrayToData(*z, expand = expand) for z in zip(obj, types)]
     return dict(zip(names, val))
 
 def varmapToList(result, expand = True):
     """Convert the values of the last simulation step to a python dictionary."""
-    names = result.getHeaderStrings()
+    names = [str(s) for s in result.getHeaderStrings()]
     obj =  result.getDataObjects()
-    types = result.getTypeStrings()
+    types = [str(s) for s in result.getTypeStrings()]
     val = [_objectToData(*z, expand = expand) for z in zip(obj,types)]
     return dict(zip(names, val))
 
 def getUnitsOfResult(result):
     """Get the list of units of the output variables."""
-    names = result.getHeaderStrings()
-    units =  result.getHeaderUnits()
+    names = [str(s) for s in result.getHeaderStrings()]
+    units = [str(s) for s in result.getHeaderUnits()]
     return dict(zip(names,units))
 
 
@@ -185,7 +187,7 @@ def setSimplaceDirectories(simplaceInstance,
 def getSimplaceDirectories(simplaceInstance):
     """Get work-, output-, projects- and data-directory.""" 
     names = ["_WORKDIR_", "_OUTPUTDIR_", "_PROJECTSDIR_", "_DATADIR_"]
-    return dict(zip(names, simplaceInstance.getDirectories()))  
+    return dict(zip(names, [str(s) for s in simplaceInstance.getDirectories()]))  
 
 def setSlotCount(count):
     """Set the maximum numbers of processors used  when running projects."""   
@@ -210,8 +212,14 @@ def _objectArrayToData(obj, simplaceType, expand = True):
     au = 'org.apache.commons.lang.ArrayUtils'
     if (simplaceType in ['DOUBLE','INT','BOOLEAN']):
         return list(jpype.JClass(au).toPrimitive(obj))
+    elif (simplaceType in ['DATE']):
+        return [str(s)[:10] for s in obj]
+    elif (simplaceType in ['CHAR']):
+        return [str(s) for s in obj]
     elif expand and simplaceType in ['DOUBLEARRAY','INTARRAY']:
         return [list(jpype.JClass(au).toPrimitive(row)) for row in obj]
+    elif expand and simplaceType in ['CHARARRAY']:
+        return [[str(s) for s in row] for row in obj]
     else:
         return list(obj)
             
@@ -225,6 +233,8 @@ def _objectToData(obj, simplaceType, expand = True):
         return list(jpype.JClass(au).toPrimitive(obj))
     elif simplaceType in ['DATE']:
         return str(obj)[:10]
+    elif simplaceType in ['CHAR']:
+        return str(obj)
     else:
         return obj            
     

@@ -3,7 +3,7 @@ See the documentation at https://simplace.readthedocs.io/
 Run and control simulations in the simulation framework Simplace.
 
 You need to install the Simplace simulation 
-framework http://www.simplace.net/
+framework https://www.simplace.net/
 
 Example usage:
 
