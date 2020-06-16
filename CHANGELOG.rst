@@ -1,3 +1,7 @@
+Version 4.3.1
+~~~~~~~~~~~~~
+ * Type safe comparison of version string
+
 Version 4.3.0
 ~~~~~~~~~~~~~
  * Compatible with Simplace 4.3
@@ -40,7 +44,7 @@ Version 4.0.1
 Version 4.0.0
 ~~~~~~~~~~~~~
  * Compatible with Simplace V4.0
- * Increased version number to have the same version as Simplace 
+ * Increased version number to have the same version as Simplace
 
 Version 0.2.6
 ~~~~~~~~~~~~~
@@ -63,7 +67,7 @@ Version 0.2.2
 ~~~~~~~~~~~~~
  * Added class SimplaceInstance for object oriented approach.
  * Added Changelog file.
- 
+
 Version 0.2.1
 ~~~~~~~~~~~~~
  * Improved documentation

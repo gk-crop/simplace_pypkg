@@ -1,7 +1,7 @@
 """
 Control the simulation framework Simplace.
 
-You need Java >= 8.0 and the Simplace simulation 
+You need Java >= 8.0 and the Simplace simulation
 framework http://www.simplace.net/
 
 **Example 1** - *Running a project:*
@@ -34,13 +34,13 @@ import os
 # Initialisation
 
 def initSimplace (installDir, workDir, outputDir,
-                  projectsDir = None, dataDir = None, 
-                  additionalClasspathList=[], javaParameters=''):   
-    """Initialisation of Simplace 
-    
+                  projectsDir = None, dataDir = None,
+                  additionalClasspathList=[], javaParameters=''):
+    """Initialisation of Simplace
+
     Start the java virtual machine and initialize
     the Simplace framework. You have to call this function first.
-    
+
     Args:
         installDir (str): Where your simplace_core, simplace_modules, simplace_run etc. reside
         workDir (str): Working directory for Simplace solutions, projects
@@ -48,34 +48,34 @@ def initSimplace (installDir, workDir, outputDir,
         projectsDir (Optional[str]): Optional folder for project data
         dataDir (Optional[str]): Optional folder for input data
         additionalClasspathList (Optional[list]): List with addtional classpath
-        javaParameters (Optional[str]): Parameters passed to the java virtual 
+        javaParameters (Optional[str]): Parameters passed to the java virtual
             machine
-        
+
     Returns:
-        SimplaceWrapper : A reference to an instance of SimplaceWrapper 
+        SimplaceWrapper : A reference to an instance of SimplaceWrapper
             java class
-    
+
     """
-    
-    cpliblist = [os.path.join(directory,filenm) 
-                for directory, _, files in os.walk(os.path.join(installDir,"simplace_core","lib")) 
-                    for filenm in files 
+
+    cpliblist = [os.path.join(directory,filenm)
+                for directory, _, files in os.walk(os.path.join(installDir,"simplace_core","lib"))
+                    for filenm in files
                         if filenm.lower().endswith('.jar')]
-    
+
     cplist = [
         'simplace_core/build/classes',
         'simplace_core/conf',
         'simplace_modules/build/classes',
         'simplace_run/build/classes',
         'simplace_run/conf',
-        'simplace_core/res/files'  
+        'simplace_core/res/files'
     ]
-    
+
     fullpathcplist = [installDir + s for s in cplist]
     allcplist = fullpathcplist + cpliblist + additionalClasspathList
     cpstring = os.pathsep.join(allcplist)
     cp = '-Djava.class.path='+cpstring
-    if hasattr(jpype,'__version_info__') and (jpype.__version_info__[0]>0 or jpype.__version_info__[1]>6) :
+    if hasattr(jpype,'__version_info__') and (int(jpype.__version_info__[0])>0 or int(jpype.__version_info__[1])>6) :
         jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters, ignoreUnrecognized=True, convertStrings=False)
     else :
         jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters)
@@ -89,10 +89,10 @@ def initSimplace (installDir, workDir, outputDir,
 def openProject(simplaceInstance,solution, project=None):
     """Create a project from the solution and optional project file."""
     simplaceInstance.prepareSession(project, solution)
-        
+
 def closeProject(simplaceInstance):
     """Close the project."""
-    simplaceInstance.shutDown()        
+    simplaceInstance.shutDown()
 
 
 # Running and configuring projects
@@ -101,7 +101,7 @@ def setProjectLines(simplaceInstance, lines):
     """Set the line numbers of the project data file used for simulations."""
     if type(lines) is list :
         lines = ','.join([str(i) for i in lines])
-    simplaceInstance.setProjectLines(lines)   
+    simplaceInstance.setProjectLines(lines)
 
 def runProject(simplaceInstance):
     """Run the project."""
@@ -123,7 +123,7 @@ def getSimulationIDs(simplaceInstance):
 def setSimulationValues(simplaceInstance, parameters):
     """Set values of actual simulation that runs stepwise."""
     simplaceInstance.setSimulationValues(_parameterListToArray(parameters))
-    
+
 def setAllSimulationValues(simplaceInstance, parameterlist):
     """Set values of all simulations in queue."""
     simplaceInstance.setAllSimulationValues(_parameterListsToArray(parameterlist))
@@ -132,7 +132,7 @@ def runSimulations(simplaceInstance, selectsimulation = False):
     """Run created simulations."""
     simplaceInstance.runSimulations(selectsimulation)
 
-def stepSimulation(simplaceInstance, count=1, parameters=None, varFilter=None, 
+def stepSimulation(simplaceInstance, count=1, parameters=None, varFilter=None,
                    simulationnumber=0):
     """Run specific simulation stepwise (default first simulation in queue)."""
     par = _parameterListToArray(parameters)
@@ -145,7 +145,7 @@ def stepAllSimulations(simplaceInstance, count=1, parameterlist=None, varFilter=
 
 
 # Fetch results and convert it to python objects.
-    
+
 def getResult(simplaceInstance, output, simulation):
     """Get a specific output of a finished simulation."""
     return simplaceInstance.getResult(output, simulation)
@@ -178,32 +178,32 @@ def getUnitsOfResult(result):
 
 # Configuration
 
-def setSimplaceDirectories(simplaceInstance, 
-                           workDir = None, outputDir = None, 
+def setSimplaceDirectories(simplaceInstance,
+                           workDir = None, outputDir = None,
                            projectsDir = None, dataDir = None):
-    """Set work-, output-, projects- and data-directory."""   
-    simplaceInstance.setDirectories(workDir, outputDir, projectsDir, dataDir)  
+    """Set work-, output-, projects- and data-directory."""
+    simplaceInstance.setDirectories(workDir, outputDir, projectsDir, dataDir)
 
 def getSimplaceDirectories(simplaceInstance):
-    """Get work-, output-, projects- and data-directory.""" 
+    """Get work-, output-, projects- and data-directory."""
     names = ["_WORKDIR_", "_OUTPUTDIR_", "_PROJECTSDIR_", "_DATADIR_"]
-    return dict(zip(names, [str(s) for s in simplaceInstance.getDirectories()]))  
+    return dict(zip(names, [str(s) for s in simplaceInstance.getDirectories()]))
 
 def setSlotCount(count):
-    """Set the maximum numbers of processors used  when running projects."""   
-    jpype.JClass('net.simplace.sim.FWSimEngine').setSlotCount(count)  
-        
+    """Set the maximum numbers of processors used  when running projects."""
+    jpype.JClass('net.simplace.sim.FWSimEngine').setSlotCount(count)
+
 def setLogLevel(level):
-    """Set the log's verbosity. Ranges from least verbose 
+    """Set the log's verbosity. Ranges from least verbose
         'ERROR','WARN','INFO','DEBUG' to most verbose 'TRACE'.
     """
     LOG = jpype.JClass('net.simplace.core.logging.Logger')
     LOGL = jpype.JClass('net.simplace.core.logging.Logger$LOGLEVEL')
     LOG.setLogLevel(LOGL.valueOf(level))
-    
+
 def setCheckLevel(simplaceInstance, level):
     """Set the checklevel of the solution."""
-    simplaceInstance.setCheckLevel(level)   
+    simplaceInstance.setCheckLevel(level)
 
 
 # Helper Functions
@@ -222,7 +222,7 @@ def _objectArrayToData(obj, simplaceType, expand = True):
         return [[str(s) for s in row] for row in obj]
     else:
         return list(obj)
-            
+
 def _objectToData(obj, simplaceType, expand = True):
     au = 'org.apache.commons.lang.ArrayUtils'
     if (simplaceType in ['DOUBLE']):
@@ -236,8 +236,8 @@ def _objectToData(obj, simplaceType, expand = True):
     elif simplaceType in ['CHAR']:
         return str(obj)
     else:
-        return obj            
-    
+        return obj
+
 def _parameterListToArray(parameter):
     if parameter is None:
         return None
@@ -250,10 +250,10 @@ def _parameterListsToArray(parameterlist):
         return None
     else:
         return jpype.JArray(jpype.java.lang.Object, 3)(
-          [[[k, _getScalarOrList(v)] for k, v in par.items()] 
+          [[[k, _getScalarOrList(v)] for k, v in par.items()]
            for par in parameterlist])
 
-    
+
 def _getScalarOrList(obj):
     if type(obj) is list:
         if all(type(a) is int for a in obj) :
