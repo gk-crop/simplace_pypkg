@@ -1,3 +1,7 @@
+Version 4.3.2
+~~~~~~~~~~~~~
+ * Add functions to autodetect simplace installation directory
+
 Version 4.3.1
 ~~~~~~~~~~~~~
  * Type safe comparison of version string

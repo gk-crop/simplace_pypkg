@@ -205,6 +205,77 @@ def setCheckLevel(simplaceInstance, level):
     """Set the checklevel of the solution."""
     simplaceInstance.setCheckLevel(level)
 
+def findSimplaceInstallations(directories=[],
+        tryStandardDirs = True,
+        firstMatchOnly = False,
+        simulationsDir = "simplace_run",
+        ignoreSimulationsDir = False,
+        verbose = True    ):
+    """Returns a list of simplace installations
+
+    Args:
+        directories (Optional([str]): list of paths where to check for simplace
+            subfolders
+        tryStandardDirs (bool): check additionally for common standard locations
+        firstMatchOnly (bool): return only the first matching directory
+        simulationsDir (str): directory that contains user simulations
+        ignoreSimulationsDir (bool): don't check for the simulations directory
+        verbose (bool): print addtional messages
+
+    Returns:
+        [str]: List of paths to Simplace installations
+
+
+    """
+    parents = []
+    home = os.environ.get('HOME')
+    if(home!=None):
+        parents = [home]
+    parents += ["d:","c:","e:","f:","g:",os.getcwd()]
+    subdirs = ["workspace/","simplace/","java/simplace/"]
+    dirs = directories
+    if(tryStandardDirs):
+        dirs = dirs + [p+"/"+s for p in parents for s in subdirs]
+    required = {"simplace_core", "simplace_modules"}
+    if(not ignoreSimulationsDir):
+        required = required.union({simulationsDir})
+    found = [d+"/" for d in dirs
+            if os.path.exists(d)
+            and required.issubset(set(os.listdir(d)))]
+    if(verbose):
+        if(len(found)==0):
+            print("Could not detect Simplace automatically")
+        if(firstMatchOnly and len(found)>1):
+            print("Found more than one Simplace installation. Returning first one.")
+    if (firstMatchOnly & len(found)>0):
+        found = [found[0]]
+    return found
+
+def findFirstSimplaceInstallation(directories=[],
+        tryStandardDirs = True,
+        simulationsDir = "simplace_run",
+        ignoreSimulationsDir = False):
+    """Returns the path of the first simplace installation found
+
+    Args:
+        directories (Optional([str]): List of paths where to check for simplace
+            subfolders
+        tryStandardDirs (bool): Check additionally for common standard locations
+        simulationsDir (str): directory that contains user simulations
+        ignoreSimulationsDir (bool): don't check for the simulations directory
+
+    Returns:
+        str: Path to first Simplace installation found
+
+    """
+    fl = findSimplaceInstallations(directories = directories,
+                                   tryStandardDirs = tryStandardDirs,
+                                   firstMatchOnly = True,
+                                   simulationsDir = simulationsDir,
+                                   ignoreSimulationsDir = ignoreSimulationsDir,
+                                   verbose = False)
+    return fl[0] if (len(fl)>0) else None
+
 
 # Helper Functions
 
