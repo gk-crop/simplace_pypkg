@@ -45,10 +45,10 @@ def initSimplace (installDir, workDir, outputDir,
         installDir (str): Where your simplace_core, simplace_modules, simplace_run etc. reside
         workDir (str): Working directory for Simplace solutions, projects
         outputDir (str): Output files will be written there
-        projectsDir (Optional[str]): Optional folder for project data
-        dataDir (Optional[str]): Optional folder for input data
-        additionalClasspathList (Optional[list]): List with addtional classpath
-        javaParameters (Optional[str]): Parameters passed to the java virtual
+        projectsDir (str): Optional folder for project data
+        dataDir (str): Optional folder for input data
+        additionalClasspathList (list): List with addtional classpaths
+        javaParameters (str): Parameters passed to the java virtual
             machine
 
     Returns:
@@ -87,59 +87,168 @@ def initSimplace (installDir, workDir, outputDir,
 # Open and close Project
 
 def openProject(simplaceInstance,solution, project=None):
-    """Create a project from the solution and optional project file."""
+    """
+    Initialises a project from the solution and optional project file.
+
+    Args:
+        simplaceInstance : handle to the SimplaceWrapper object returned by
+            initSimplace
+        solution (str): absolute path to solution file
+        project (str): absolute path to project file (optional)
+    """
     simplaceInstance.prepareSession(project, solution)
 
 def closeProject(simplaceInstance):
-    """Close the project."""
+    """
+    Close the project.
+
+    Parameters:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+    """
     simplaceInstance.shutDown()
 
 
 # Running and configuring projects
 
 def setProjectLines(simplaceInstance, lines):
-    """Set the line numbers of the project data file used for simulations."""
+    """
+    Set the line numbers of the project data file used for simulations.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        lines (str): a string with line specifications, e.g. "3-10,15,30-33"
+            or a list of linenumbers [1,2,9,11]
+    """
     if type(lines) is list :
         lines = ','.join([str(i) for i in lines])
     simplaceInstance.setProjectLines(lines)
 
 def runProject(simplaceInstance):
-    """Run the project."""
+    """
+    Run the project.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+    """
     simplaceInstance.run()
 
 
 # Creating, configuring and running simulations
 
 def createSimulation(simplaceInstance, parameters = None, queue=True):
-    """Create a single simulation and set initial parameters."""
+    """
+    Create a single simulation and set initial parameters.
+
+    Args:
+        simplaceInstance :  handle to the SimplaceWrapper object returned by
+            initSimplace
+        parameters (dict): key-value pairs where the key has to match the
+            Simplace SimVariable name (optional)
+        queue (bool): if true add the simulation to the queue of simulations,
+            else empty the queue before adding the simulation
+
+    Returns:
+        str : id of the created simulation
+
+    """
     par = _parameterListToArray(parameters)
     simplaceInstance.createSimulation(par)
     return str(getSimulationIDs(simplaceInstance)[-1])
 
 def getSimulationIDs(simplaceInstance):
-    """Get the ids of ready to run simulations."""
+    """
+    Get the ids of ready to run simulations.
+
+    Args:
+        simplaceInstance : handle to the SimplaceWrapper object returned by
+            initSimplace
+
+    Returns:
+        list : list of simulation ids
+
+    """
     return [str(s) for s in simplaceInstance.getSimulationIDs()]
 
 def setSimulationValues(simplaceInstance, parameters):
-    """Set values of actual simulation that runs stepwise."""
+    """
+    Set values of actual simulation that runs stepwise.
+
+    Args:
+        simplaceInstance : handle to the SimplaceWrapper object returned by
+            initSimplace
+        parameters (dict) : key-value pairs where the key has to match the
+            Simplace SimVariable name
+    """
     simplaceInstance.setSimulationValues(_parameterListToArray(parameters))
 
 def setAllSimulationValues(simplaceInstance, parameterlist):
-    """Set values of all simulations in queue."""
+    """
+    Set values of all simulations in queue.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        parameterlist (list): a list of dictinaries with key-value pairs where
+            the key has to match the Simplace SimVariable name
+    """
     simplaceInstance.setAllSimulationValues(_parameterListsToArray(parameterlist))
 
 def runSimulations(simplaceInstance, selectsimulation = False):
-    """Run created simulations."""
+    """
+    Run created simulations.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        selectsimulation (bool): if true, it keeps a selected simulation
+            (not yet usable)
+    """
     simplaceInstance.runSimulations(selectsimulation)
 
 def stepSimulation(simplaceInstance, count=1, parameters=None, varFilter=None,
                    simulationnumber=0):
-    """Run specific simulation stepwise (default first simulation in queue)."""
+    """
+    Run specific simulation stepwise (default first simulation in queue).
+
+    Arguments:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        count (int): number of steps to perform
+        parameters (dict): key-value pairs where the key has to match the
+            Simplace SimVariable name
+        varFilter (list): list of variable names to be included in the result.
+            If not set, all variables are returned
+        simulationnumber (int): number of simulation in the queue that should be
+            run stepwise (default first simulation)
+
+    Returns:
+        VarMap : handle to simulation variables (possibly filtered). To access
+        the variables, convert the result by varmapToList
+    """
     par = _parameterListToArray(parameters)
     return simplaceInstance.stepSpecific(simulationnumber, par, varFilter,count)
 
 def stepAllSimulations(simplaceInstance, count=1, parameterlist=None, varFilter=None):
-    """Run all simulations in queue stepwise."""
+    """
+    Run all simulations in queue stepwise.
+
+    Arguments:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        count (int): number of steps to perform
+        parameterlist (list): a list of dictinaries with key-value pairs where
+            the key has to match the Simplace SimVariable name
+        varFilter (list): list of variable names to be included in the result.
+            If not set, all variables are returned
+
+    Returns:
+        list : list of handles to simulation variables (possibly filtered).
+        To access the variables, convert the items by varmapToList
+
+    """
     par = _parameterListsToArray(parameterlist)
     return simplaceInstance.stepAll(par,varFilter,count)
 
@@ -147,11 +256,36 @@ def stepAllSimulations(simplaceInstance, count=1, parameterlist=None, varFilter=
 # Fetch results and convert it to python objects.
 
 def getResult(simplaceInstance, output, simulation):
-    """Get a specific output of a finished simulation."""
+    """
+    Get a specific output of a finished simulation.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        output (str): id of the memory output
+        simulation (str): simulation id
+
+    Returns:
+        Result : handle to simulation output. To access the variables, convert
+        the items by resultToList
+    """
     return simplaceInstance.getResult(output, simulation)
 
 def resultToList(result, expand = True, start=None, end=None):
-    """Convert the output to a python dictionary"""
+    """
+    Convert the output to a python dictionary
+
+    Args:
+        result: handle to simulation result (as returned by getResult())
+        expand (bool): whether array values should be expanded to lists or
+            kept as handles to java objects (optional)
+        start (int): number of first entry to fetch (optional)
+        end (end): number of last entry to fetch (optional)
+
+    Returns:
+        dict : simulation results as key-value pairs. Keys are the simulation
+        variable nams, values are lists of simulated daily/yearly values
+    """
     if(start is not None and end is not None and start <= end and start >= 0):
         obj =  result.getDataObjects(start, end)
     else :
@@ -161,16 +295,37 @@ def resultToList(result, expand = True, start=None, end=None):
     val = [_objectArrayToData(*z, expand = expand) for z in zip(obj, types)]
     return dict(zip(names, val))
 
-def varmapToList(result, expand = True):
-    """Convert the values of the last simulation step to a python dictionary."""
-    names = [str(s) for s in result.getHeaderStrings()]
-    obj =  result.getDataObjects()
-    types = [str(s) for s in result.getTypeStrings()]
+def varmapToList(varmap, expand = True):
+    """
+    Convert the values of the last simulation step to a python dictionary.
+
+    Args:
+        varmap : handle to simulation varmap (as returned by stepSimulation())
+        expand (bool): whether array values should be expanded to lists or
+            kept as handles to java objects (optional)
+
+    Returns:
+        dict : simulation values as key-value pairs. Keys are the simulation
+        variable nams, values are the values from last simulation step
+    """
+    names = [str(s) for s in varmap.getHeaderStrings()]
+    obj =  varmap.getDataObjects()
+    types = [str(s) for s in varmap.getTypeStrings()]
     val = [_objectToData(*z, expand = expand) for z in zip(obj,types)]
     return dict(zip(names, val))
 
 def getUnitsOfResult(result):
-    """Get the list of units of the output variables."""
+    """
+    Get the list of units of the output variables.
+
+    Args:
+        result: handle to simulation result (as returned by getResult())
+
+    Returns:
+        dict: dictionary where the variable names are keys and the units are the
+        values
+
+    """
     names = [str(s) for s in result.getHeaderStrings()]
     units = [str(s) for s in result.getHeaderUnits()]
     return dict(zip(names,units))
@@ -181,28 +336,65 @@ def getUnitsOfResult(result):
 def setSimplaceDirectories(simplaceInstance,
                            workDir = None, outputDir = None,
                            projectsDir = None, dataDir = None):
-    """Set work-, output-, projects- and data-directory."""
+    """
+    Set work-, output-, projects- and data-directory.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        workDir (str): path to working directory
+        outputDir (str): path to output directory
+        projectsDir (str): path to projects directory
+        dataDir (str): path to data directory
+    """
     simplaceInstance.setDirectories(workDir, outputDir, projectsDir, dataDir)
 
 def getSimplaceDirectories(simplaceInstance):
-    """Get work-, output-, projects- and data-directory."""
+    """
+    Get work-, output-, projects- and data-directory.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+
+    Returns:
+        dict: dictionary with the actual paths for work-, outputdir etc.
+    """
     names = ["_WORKDIR_", "_OUTPUTDIR_", "_PROJECTSDIR_", "_DATADIR_"]
     return dict(zip(names, [str(s) for s in simplaceInstance.getDirectories()]))
 
 def setSlotCount(count):
-    """Set the maximum numbers of processors used  when running projects."""
+    """
+    Set the maximum numbers of processor cores used  when running projects.
+
+    Args:
+        count (int): maximal numbers of processor cores used.
+    """
     jpype.JClass('net.simplace.sim.FWSimEngine').setSlotCount(count)
 
 def setLogLevel(level):
-    """Set the log's verbosity. Ranges from least verbose
-        'ERROR','WARN','INFO','DEBUG' to most verbose 'TRACE'.
+    """
+    Set the log's verbosity.  FATAL is least verbose, TRACE most verbose
+
+    Args:
+        level (str): possible values from least verbose 'FATAL' via 'ERROR',
+            'WARN', 'INFO', 'DEBUG' to most verbose 'TRACE'
     """
     LOG = jpype.JClass('net.simplace.core.logging.Logger')
     LOGL = jpype.JClass('net.simplace.core.logging.Logger$LOGLEVEL')
     LOG.setLogLevel(LOGL.valueOf(level))
 
 def setCheckLevel(simplaceInstance, level):
-    """Set the checklevel of the solution."""
+    """
+    Set the checklevel of the solution. OFF does no checks,
+        STRICT does most severe checks.
+
+    Args:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+        level (str): possible values: "CUSTOM,"STRICT","INTENSE","LAZY","OFF",
+            "ONLY"
+    """
     simplaceInstance.setCheckLevel(level)
 
 def findSimplaceInstallations(directories=[],
@@ -211,10 +403,11 @@ def findSimplaceInstallations(directories=[],
         simulationsDir = "simplace_run",
         ignoreSimulationsDir = False,
         verbose = True    ):
-    """Returns a list of simplace installations
+    """
+    Returns a list of simplace installations
 
     Args:
-        directories (Optional([str]): list of paths where to check for simplace
+        directories (list): list of paths where to check for simplace
             subfolders
         tryStandardDirs (bool): check additionally for common standard locations
         firstMatchOnly (bool): return only the first matching directory
@@ -223,9 +416,7 @@ def findSimplaceInstallations(directories=[],
         verbose (bool): print addtional messages
 
     Returns:
-        [str]: List of paths to Simplace installations
-
-
+        list: List of paths to Simplace installations
     """
     parents = []
     home = os.environ.get('HOME')
@@ -255,10 +446,11 @@ def findFirstSimplaceInstallation(directories=[],
         tryStandardDirs = True,
         simulationsDir = "simplace_run",
         ignoreSimulationsDir = False):
-    """Returns the path of the first simplace installation found
+    """
+    Returns the path of the first simplace installation found
 
     Args:
-        directories (Optional([str]): List of paths where to check for simplace
+        directories (list): List of paths where to check for simplace
             subfolders
         tryStandardDirs (bool): Check additionally for common standard locations
         simulationsDir (str): directory that contains user simulations
@@ -266,7 +458,6 @@ def findFirstSimplaceInstallation(directories=[],
 
     Returns:
         str: Path to first Simplace installation found
-
     """
     fl = findSimplaceInstallations(directories = directories,
                                    tryStandardDirs = tryStandardDirs,

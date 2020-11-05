@@ -15,6 +15,7 @@
 
 import sys
 import os
+import datetime
 import shlex
 
 # If extensions (or modules to document with autodoc) are in another directory,
@@ -64,7 +65,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'simplace'
-copyright = '2017, Gunther Krauss'
+copyright = '2017-'+str(datetime.datetime.now().year)+', Gunther Krauss'
 author = 'Gunther Krauss'
 
 # The version info for the project you're documenting, acts as replacement for
