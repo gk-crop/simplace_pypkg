@@ -387,7 +387,7 @@ def setLogLevel(level):
 def setCheckLevel(simplaceInstance, level):
     """
     Set the checklevel of the solution. OFF does no checks,
-        STRICT does most severe checks.
+    STRICT does most severe checks.
 
     Args:
         simplaceInstance: handle to the SimplaceWrapper object returned by
