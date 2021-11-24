@@ -86,7 +86,7 @@ def initSimplace (installDir, workDir, outputDir,
 
 # Open and close Project
 
-def openProject(simplaceInstance,solution, project=None):
+def openProject(simplaceInstance,solution, project=None, parameters=None):
     """
     Initialises a project from the solution and optional project file.
 
@@ -95,8 +95,12 @@ def openProject(simplaceInstance,solution, project=None):
             initSimplace
         solution (str): absolute path to solution file
         project (str): absolute path to project file (optional)
+        parameters (dict): key-value pairs where the key has to match the
+            Simplace SimVariable name (optional)
+
     """
-    simplaceInstance.prepareSession(project, solution)
+    par = _parameterListToArray(parameters)
+    simplaceInstance.prepareSession(project, solution, par)
 
 def closeProject(simplaceInstance):
     """
@@ -255,15 +259,18 @@ def stepAllSimulations(simplaceInstance, count=1, parameterlist=None, varFilter=
 
 # Fetch results and convert it to python objects.
 
-def getResult(simplaceInstance, output, simulation):
+def getResult(simplaceInstance, output, simulation=None):
     """
     Get a specific output of a finished simulation.
+
+    If the parameter simulation is not given, the results
+    of all simulation will be returned.
 
     Args:
         simplaceInstance: handle to the SimplaceWrapper object returned by
             initSimplace
         output (str): id of the memory output
-        simulation (str): simulation id
+        simulation (str): simulation id (optional)
 
     Returns:
         Result : handle to simulation output. To access the variables, convert

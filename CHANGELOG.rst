@@ -1,3 +1,10 @@
+Version 4.4.0
+~~~~~~~~~~~~~
+ * Compatible with Simplace 4.4
+ * Forward compatibility with upcoming Simplace 4.5
+ * OpenProject can override variables (Simplace version >= 4.5)
+ * getResults - parameter simulation optional (Simplace version >=4.5)
+
 Version 4.3.2
 ~~~~~~~~~~~~~
  * Add functions to autodetect simplace installation directory
