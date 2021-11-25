@@ -41,6 +41,10 @@ class SimplaceInstance:
                                  projectsDir, dataDir,
                                  additionalClasspathList, javaParameters)
 
+    def shutDown(self):
+        """Terminates the java virtual machine"""
+        simplace.shutDown(self._sh)
+
     def openProject(self, solution, project = None, parameters=None):
         """Create a project from the solution and optional project file."""
         simplace.openProject(self._sh, solution, project, parameters)

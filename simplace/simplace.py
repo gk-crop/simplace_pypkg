@@ -29,6 +29,7 @@ framework http://www.simplace.net/
 
 import jpype
 import os
+import numpy
 
 
 # Initialisation
@@ -82,6 +83,17 @@ def initSimplace (installDir, workDir, outputDir,
     Wrapper = jpype.JClass('net.simplace.sim.wrapper.SimplaceWrapper')
     simplaceInstance = Wrapper(workDir, outputDir, projectsDir, dataDir)
     return simplaceInstance
+
+def shutDown(simplaceInstance):
+    """
+    Stops the java virtual machine.
+
+    Parameters:
+        simplaceInstance: handle to the SimplaceWrapper object returned by
+            initSimplace
+    """
+    simplaceInstance.shutDown()
+    jpype.java.lang.System.exit(0)
 
 
 # Open and close Project
@@ -278,7 +290,7 @@ def getResult(simplaceInstance, output, simulation=None):
     """
     return simplaceInstance.getResult(output, simulation)
 
-def resultToList(result, expand = True, start=None, end=None):
+def resultToList(result, expand=True, start=None, end=None, legacy=False):
     """
     Convert the output to a python dictionary
 
@@ -287,7 +299,8 @@ def resultToList(result, expand = True, start=None, end=None):
         expand (bool): whether array values should be expanded to lists or
             kept as handles to java objects (optional)
         start (int): number of first entry to fetch (optional)
-        end (end): number of last entry to fetch (optional)
+        end (int): number of last entry to fetch (optional)
+        legacy (bool): if True, don't use numpy (optional)
 
     Returns:
         dict : simulation results as key-value pairs. Keys are the simulation
@@ -299,10 +312,11 @@ def resultToList(result, expand = True, start=None, end=None):
         obj =  result.getDataObjects()
     names = [str(s) for s in result.getHeaderStrings()]
     types = [str(s) for s in result.getTypeStrings()]
-    val = [_objectArrayToData(*z, expand = expand) for z in zip(obj, types)]
+    val = [_objectArrayToData(*z, expand=expand, legacy=legacy)
+           for z in zip(obj, types)]
     return dict(zip(names, val))
 
-def varmapToList(varmap, expand = True):
+def varmapToList(varmap, expand=True, legacy=False):
     """
     Convert the values of the last simulation step to a python dictionary.
 
@@ -310,6 +324,7 @@ def varmapToList(varmap, expand = True):
         varmap : handle to simulation varmap (as returned by stepSimulation())
         expand (bool): whether array values should be expanded to lists or
             kept as handles to java objects (optional)
+        legacy (bool): if True, don't use numpy (optional)
 
     Returns:
         dict : simulation values as key-value pairs. Keys are the simulation
@@ -318,7 +333,8 @@ def varmapToList(varmap, expand = True):
     names = [str(s) for s in varmap.getHeaderStrings()]
     obj =  varmap.getDataObjects()
     types = [str(s) for s in varmap.getTypeStrings()]
-    val = [_objectToData(*z, expand = expand) for z in zip(obj,types)]
+    val = [_objectToData(*z, expand=expand, legacy=legacy)
+           for z in zip(obj,types)]
     return dict(zip(names, val))
 
 def getUnitsOfResult(result):
@@ -477,7 +493,20 @@ def findFirstSimplaceInstallation(directories=[],
 
 # Helper Functions
 
-def _objectArrayToData(obj, simplaceType, expand = True):
+
+def _objectArrayToData(obj, simplaceType, expand = True, legacy = False):
+    if legacy:
+        return _objectArrayToDataOld(obj, simplaceType, expand)
+    else:
+        return _objectArrayToDataNew(obj, simplaceType, expand)
+
+def _objectToData(obj, simplaceType, expand = True, legacy = False):
+    if legacy:
+        return _objectToDataOld(obj, simplaceType, expand)
+    else:
+        return _objectToDataNew(obj, simplaceType, expand)
+
+def _objectArrayToDataOld(obj, simplaceType, expand = True):
     au = 'org.apache.commons.lang.ArrayUtils'
     if (simplaceType in ['DOUBLE','INT','BOOLEAN']):
         return list(jpype.JClass(au).toPrimitive(obj))
@@ -492,7 +521,7 @@ def _objectArrayToData(obj, simplaceType, expand = True):
     else:
         return list(obj)
 
-def _objectToData(obj, simplaceType, expand = True):
+def _objectToDataOld(obj, simplaceType, expand = True):
     au = 'org.apache.commons.lang.ArrayUtils'
     if (simplaceType in ['DOUBLE']):
         return obj.doubleValue()
@@ -504,6 +533,38 @@ def _objectToData(obj, simplaceType, expand = True):
         return str(obj)[:10]
     elif simplaceType in ['CHAR']:
         return str(obj)
+    else:
+        return obj
+
+
+
+def _objectArrayToDataNew(obj, simplaceType, expand = True):
+    if (simplaceType in ['DOUBLE','INT','BOOLEAN']):
+        return numpy.array(obj)
+    elif (simplaceType in ['DATE']):
+        return [str(s)[:10] for s in obj]
+    elif (simplaceType in ['CHAR']):
+        return [str(s) for s in obj]
+    elif expand and simplaceType in ['DOUBLEARRAY','INTARRAY']:
+        return numpy.array(obj)
+    elif expand and simplaceType in ['CHARARRAY']:
+        return [[str(s) for s in row] for row in obj]
+    else:
+        return list(obj)
+
+def _objectToDataNew(obj, simplaceType, expand = True):
+    if (simplaceType in ['DOUBLE']):
+        return obj.doubleValue()
+    elif (simplaceType in ['INT']):
+        return obj.intValue()
+    elif simplaceType in ['DATE']:
+        return str(obj)[:10]
+    elif simplaceType in ['CHAR']:
+        return str(obj)
+    elif expand and simplaceType in ['DOUBLEARRAY','INTARRAY']:
+        return numpy.array(obj)
+    elif (simplaceType in ['CHARARRAY']):
+        return [str(s) for s in obj]
     else:
         return obj
 

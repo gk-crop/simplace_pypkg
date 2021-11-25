@@ -17,4 +17,4 @@ Example usage:
     >>> print(result['BiomassModule.Yield'])
     805.45
     
-The module requires Java >= 8.0 and JPype1.
+The module requires Java >= 8.0 and python packages numpy and JPype1.

@@ -1,3 +1,9 @@
+Version 4.4.1
+~~~~~~~~~~~~~
+ * New method shutDown to terminate Java
+ * Requires numpy
+ * resultToList and varmapToList use numpy if param legacy ist not set to True
+
 Version 4.4.0
 ~~~~~~~~~~~~~
  * Compatible with Simplace 4.4
