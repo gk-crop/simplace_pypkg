@@ -10,7 +10,7 @@ def read(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
-jp = 'Jpype1'    
+jp = 'Jpype1'
 
 __version__ = ''
 exec(open('simplace/_version.py').read())
@@ -25,7 +25,7 @@ setup(name='simplace',
       license='GPL3',
       packages=['simplace'],
       install_requires=[
-          jp,
+          jp, 'numpy'
       ],
       classifiers=[
           'Development Status :: 4 - Beta',
@@ -34,6 +34,6 @@ setup(name='simplace',
           'Topic :: Scientific/Engineering',
           'Programming Language :: Python',
           'Programming Language :: Java'
-          
+
       ],
       zip_safe=False)

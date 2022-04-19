@@ -2,7 +2,7 @@ See the documentation at https://simplace.readthedocs.io/
 
 Run and control simulations in the simulation framework Simplace.
 
-You need to install the Simplace simulation 
+You need to install the Simplace simulation
 framework https://www.simplace.net/
 
 Example usage:
@@ -16,5 +16,5 @@ Example usage:
     >>> simplace.closeProject(sh)
     >>> print(result['BiomassModule.Yield'])
     805.45
-    
-The module requires Java >= 8.0 and JPype1.
+
+The module requires Java >= 11.0 and python packages numpy and JPype1.

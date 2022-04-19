@@ -1,3 +1,22 @@
+Version 5.0.0
+~~~~~~~~~~~~~
+ * Compatible with Simplace 5.0
+ * Requires Java >= 11.0
+ * Updated minimal version requirement for Jpype1
+
+Version 4.4.1
+~~~~~~~~~~~~~
+ * New method shutDown to terminate Java
+ * Requires numpy
+ * resultToList and varmapToList use numpy if param legacy ist not set to True
+
+Version 4.4.0
+~~~~~~~~~~~~~
+ * Compatible with Simplace 4.4
+ * Forward compatibility with upcoming Simplace 4.5
+ * OpenProject can override variables (Simplace version >= 4.5)
+ * getResults - parameter simulation optional (Simplace version >=4.5)
+
 Version 4.3.2
 ~~~~~~~~~~~~~
  * Add functions to autodetect simplace installation directory

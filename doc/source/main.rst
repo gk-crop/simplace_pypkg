@@ -25,10 +25,10 @@ Object oriented interface
 Troubleshooting
 ================
 
-Simplace requires the package JPype1.
-If it is not installed automatically, try to install JPype manually. 
-JPype1 optionally needs the package numpy. If you can't install numpy, then try to 
-install JPype1 manually without numpy support. For Windows you can use binary packages
+Simplace requires the packages JPype1 and numpy.
+If they are not installed automatically, try to install numpy and JPype manually. 
+
+For Windows you can use binary packages
 from http://www.lfd.uci.edu/~gohlke/pythonlibs/
 
 You need also the Microsoft Visual C++ 2015 Redistributables. If they are not yet installed
