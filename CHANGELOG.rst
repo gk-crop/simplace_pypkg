@@ -1,3 +1,10 @@
+Version 5.0.1
+~~~~~~~~~~~~~
+ * Parameter InstallationDir is now optional, tries to fetch it automatically
+ * Function initSimplaceDefault can be used for different settings without specifying directories
+ * Solution and project files can be given as a path relative to workdir
+ * Added function to retrieve output datatypes
+
 Version 5.0.0
 ~~~~~~~~~~~~~
  * Compatible with Simplace 5.0

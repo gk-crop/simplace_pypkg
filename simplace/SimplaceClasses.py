@@ -34,7 +34,7 @@ import simplace
 class SimplaceInstance:
     """Class to access and control the simulation Framework Simplace"""
 
-    def __init__(self, installDir, workDir, outputDir,
+    def __init__(self, installDir = None, workDir = None, outputDir = None,
                 projectsDir=None, dataDir=None,
                  additionalClasspathList =[], javaParameters = ''):
         self._sh = simplace.initSimplace(installDir, workDir, outputDir,
@@ -142,6 +142,9 @@ class SimplaceResult():
     def getUnits(self):
         """Get units of the result values."""
         return simplace.getUnitsOfResult(self._rs)
+    def getDatatypes(self):
+        """Get datatypes of the result values."""
+        return simplace.getDatatypesOfResult(self._rs)
 
 
 

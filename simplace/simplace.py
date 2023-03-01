@@ -31,10 +31,9 @@ import jpype
 import os
 import numpy
 
-
 # Initialisation
 
-def initSimplace (installDir, workDir, outputDir,
+def initSimplace (installDir = None, workDir = None, outputDir = None,
                   projectsDir = None, dataDir = None,
                   additionalClasspathList=[], javaParameters=''):
     """Initialisation of Simplace
@@ -43,7 +42,8 @@ def initSimplace (installDir, workDir, outputDir,
     the Simplace framework. You have to call this function first.
 
     Args:
-        installDir (str): Where your simplace_core, simplace_modules, simplace_run etc. reside
+        installDir (str): Where your simplace_core, simplace_modules,
+            simplace_run etc. reside
         workDir (str): Working directory for Simplace solutions, projects
         outputDir (str): Output files will be written there
         projectsDir (str): Optional folder for project data
@@ -57,6 +57,15 @@ def initSimplace (installDir, workDir, outputDir,
             java class
 
     """
+
+    if (installDir == None):
+        installDir = findFirstSimplaceInstallation()
+
+    if(workDir == None):
+        workDir = os.path.join(installDir,'simplace_run/simulation/')
+
+    if(outputDir == None):
+        outputDir = os.path.join(installDir,'simplace_run/output/')
 
     cpliblist = [os.path.join(directory,filenm)
                 for directory, _, files in os.walk(os.path.join(installDir,"simplace_core","lib"))
@@ -96,6 +105,39 @@ def shutDown(simplaceInstance):
     jpype.java.lang.System.exit(0)
 
 
+def initSimplaceDefault(setting="run"):
+    """
+    Initialises Simplace with work- and outputdir for different settings
+
+    Args:
+        setting (str): one of 'run', 'modules', 'lapclient' or 'wininstall'
+
+    Returns:
+        SimplaceWrapper : A reference to an instance of SimplaceWrapper
+            java class
+
+    """
+    d = findFirstSimplaceInstallation()
+    print(d)
+    if setting == "modules":
+        wd = os.path.join(d,"simplace_modules/test/")
+        od = os.path.join(d,"simplace_modules/output/")
+    elif setting == "lapclient":
+        hd = os.path.expanduser('~')
+        wd = os.path.join(hd,"lapclient/data/")
+        od = os.path.join(hd,"lapclient/output/")
+    elif setting == "wininstall":
+        wd = os.path.join(d,"SIMPLACE_WORK/")
+        od = os.path.join(d,"SIMPLACE_WORK/output/")
+    else:
+        wd = os.path.join(d,"simplace_run/simulation/")
+        od = os.path.join(d,"simplace_run/output/")
+    print(wd)
+    print(od)
+    return initSimplace(d, wd, od)
+
+
+
 # Open and close Project
 
 def openProject(simplaceInstance,solution, project=None, parameters=None):
@@ -105,12 +147,23 @@ def openProject(simplaceInstance,solution, project=None, parameters=None):
     Args:
         simplaceInstance : handle to the SimplaceWrapper object returned by
             initSimplace
-        solution (str): absolute path to solution file
-        project (str): absolute path to project file (optional)
+        solution (str): path (absolute or relative to workDir) to solution file
+        project (str): path (abs. or rel. to workDir) to project file (optional)
         parameters (dict): key-value pairs where the key has to match the
             Simplace SimVariable name (optional)
 
     """
+    dirs = getSimplaceDirectories(simplaceInstance)
+
+    if not os.path.exists(solution):
+        newsolution = os.path.join(dirs['_WORKDIR_'], solution.lstrip("\\/"))
+        if os.path.exists(newsolution):
+            solution = newsolution
+    if (project != None and not os.path.exists(project)):
+        newproject = os.path.join(dirs['_WORKDIR_'], project.lstrip("\\/"))
+        if os.path.exists(newproject):
+            project = newproject
+
     par = _parameterListToArray(parameters)
     simplaceInstance.prepareSession(project, solution, par)
 
@@ -354,6 +407,23 @@ def getUnitsOfResult(result):
     return dict(zip(names,units))
 
 
+def getDatatypesOfResult(result):
+    """
+    Get the list of datatypes of the output variables.
+
+    Args:
+        result: handle to simulation result (as returned by getResult())
+
+    Returns:
+        dict: dictionary where the variable names are keys and the datatypes
+        are the values
+
+    """
+    names = [str(s) for s in result.getHeaderStrings()]
+    types = [str(s) for s in result.getTypeStrings()]
+    return dict(zip(names,types))
+
+
 # Configuration
 
 def setSimplaceDirectories(simplaceInstance,
@@ -453,7 +523,7 @@ def findSimplaceInstallations(directories=[],
     required = {"simplace_core", "simplace_modules"}
     if(not ignoreSimulationsDir):
         required = required.union({simulationsDir})
-    found = [d+"/" for d in dirs
+    found = [d.rstrip("\\/")+"/" for d in dirs
             if os.path.exists(d)
             and required.issubset(set(os.listdir(d)))]
     if(verbose):
@@ -489,6 +559,7 @@ def findFirstSimplaceInstallation(directories=[],
                                    ignoreSimulationsDir = ignoreSimulationsDir,
                                    verbose = False)
     return fl[0] if (len(fl)>0) else None
+
 
 
 # Helper Functions
