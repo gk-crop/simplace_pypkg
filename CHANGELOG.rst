@@ -1,3 +1,7 @@
+Version 5.0.2
+~~~~~~~~~~~~~
+ * Set correct workdir for setting "lapclient"
+
 Version 5.0.1
 ~~~~~~~~~~~~~
  * Parameter InstallationDir is now optional, tries to fetch it automatically

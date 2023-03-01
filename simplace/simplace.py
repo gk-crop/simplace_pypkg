@@ -123,12 +123,12 @@ def initSimplaceDefault(setting="run"):
         wd = os.path.join(d,"simplace_modules/test/")
         od = os.path.join(d,"simplace_modules/output/")
     elif setting == "lapclient":
-        hd = os.path.expanduser('~')
-        wd = os.path.join(hd,"lapclient/data/")
-        od = os.path.join(hd,"lapclient/output/")
+        wd = os.path.join(d,"lapclient/data/")
+        od = os.path.join(d,"lapclient/output/")
     elif setting == "wininstall":
-        wd = os.path.join(d,"SIMPLACE_WORK/")
-        od = os.path.join(d,"SIMPLACE_WORK/output/")
+        hd = os.path.expanduser('~')
+        wd = os.path.join(hd,"SIMPLACE_WORK/")
+        od = os.path.join(hd,"SIMPLACE_WORK/output/")
     else:
         wd = os.path.join(d,"simplace_run/simulation/")
         od = os.path.join(d,"simplace_run/output/")
