@@ -1,3 +1,8 @@
+Version 5.0.3
+~~~~~~~~~~~~~
+ * InstallationDir can point also to a folder containing lib subfolder with required simplace .jars
+ * findSimplaceInstallation now checks more directories
+
 Version 5.0.2
 ~~~~~~~~~~~~~
  * Set correct workdir for setting "lapclient"

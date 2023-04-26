@@ -71,6 +71,10 @@ def initSimplace (installDir = None, workDir = None, outputDir = None,
                 for directory, _, files in os.walk(os.path.join(installDir,"simplace_core","lib"))
                     for filenm in files
                         if filenm.lower().endswith('.jar')]
+    cpliblist = cpliblist + [os.path.join(directory,filenm)
+                for directory, _, files in os.walk(os.path.join(installDir,"lib"))
+                    for filenm in files
+                        if filenm.lower().endswith('.jar')]
 
     cplist = [
         'simplace_core/build/classes',
@@ -516,7 +520,7 @@ def findSimplaceInstallations(directories=[],
     if(home!=None):
         parents = [home]
     parents += ["d:","c:","e:","f:","g:",os.getcwd()]
-    subdirs = ["workspace/","simplace/","java/simplace/"]
+    subdirs = ["workspace/","simplace/","java/simplace/","simplace/workspace/"]
     dirs = directories
     if(tryStandardDirs):
         dirs = dirs + [p+"/"+s for p in parents for s in subdirs]
