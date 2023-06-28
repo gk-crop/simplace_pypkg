@@ -35,7 +35,7 @@ import numpy
 
 def initSimplace (installDir = None, workDir = None, outputDir = None,
                   projectsDir = None, dataDir = None,
-                  additionalClasspathList=[], javaParameters=''):
+                  additionalClasspathList=[], javaParameters=None):
     """Initialisation of Simplace
 
     Start the java virtual machine and initialize
@@ -49,7 +49,7 @@ def initSimplace (installDir = None, workDir = None, outputDir = None,
         projectsDir (str): Optional folder for project data
         dataDir (str): Optional folder for input data
         additionalClasspathList (list): List with addtional classpaths
-        javaParameters (str): Parameters passed to the java virtual
+        javaParameters (str[]): Parameter list passed to the java virtual
             machine
 
     Returns:
@@ -87,12 +87,13 @@ def initSimplace (installDir = None, workDir = None, outputDir = None,
 
     fullpathcplist = [installDir + s for s in cplist]
     allcplist = fullpathcplist + cpliblist + additionalClasspathList
-    cpstring = os.pathsep.join(allcplist)
-    cp = '-Djava.class.path='+cpstring
-    if hasattr(jpype,'__version_info__') and (int(jpype.__version_info__[0])>0 or int(jpype.__version_info__[1])>6) :
-        jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters, ignoreUnrecognized=True, convertStrings=False)
-    else :
-        jpype.startJVM(jpype.getDefaultJVMPath(), cp, javaParameters)
+
+    if javaParameters==None:
+        javaParameters=[]
+    if isinstance(javaParameters,str):
+        javaParameters=[javaParameters]
+
+    jpype.startJVM(*javaParameters, jvmpath=jpype.getDefaultJVMPath(), classpath=allcplist, ignoreUnrecognized=True, convertStrings=False)
     Wrapper = jpype.JClass('net.simplace.sim.wrapper.SimplaceWrapper')
     simplaceInstance = Wrapper(workDir, outputDir, projectsDir, dataDir)
     return simplaceInstance

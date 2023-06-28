@@ -1,3 +1,11 @@
+Version 5.0.5
+~~~~~~~~~~~~~
+* additional java parameters as list or as string (one parameter)
+
+Version 5.0.4
+~~~~~~~~~~~~~
+* Bugfix to allow more than one additional java parameter
+
 Version 5.0.3
 ~~~~~~~~~~~~~
  * InstallationDir can point also to a folder containing lib subfolder with required simplace .jars
