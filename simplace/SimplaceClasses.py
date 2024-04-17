@@ -36,7 +36,7 @@ class SimplaceInstance:
 
     def __init__(self, installDir = None, workDir = None, outputDir = None,
                 projectsDir=None, dataDir=None,
-                 additionalClasspathList =[], javaParameters = ''):
+                 additionalClasspathList =[], javaParameters = None):
         self._sh = simplace.initSimplace(installDir, workDir, outputDir,
                                  projectsDir, dataDir,
                                  additionalClasspathList, javaParameters)

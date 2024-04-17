@@ -1,3 +1,8 @@
+Version 5.1.0
+~~~~~~~~~~~~~
+* compatible with Simplace 5.1
+* fix initialisation of object oriented version when no java parmeters were given
+
 Version 5.0.5
 ~~~~~~~~~~~~~
 * additional java parameters as list or as string (one parameter)
